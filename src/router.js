@@ -22,7 +22,20 @@ export default new VueRouter({
    */
 
   routes: [
-    { path: '/', component: load('Hello') },
+    {
+      path: '/',
+      component: load('Nav'),
+      children: [
+        {
+          path: '/',
+          component: load('Home')
+        },
+        {
+          path: '/trips/:trip',
+          component: load('Trip')
+        }
+      ]
+    },
 
     // Always leave this last one
     { path: '*', component: load('Error404') } // Not found

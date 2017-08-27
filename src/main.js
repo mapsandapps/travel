@@ -17,6 +17,8 @@ import router from './router'
 Vue.config.productionTip = false
 Vue.use(Quasar) // Install Quasar Framework
 
+import store from './store'
+
 if (__THEME === 'mat') {
   require('quasar-extras/roboto-font')
 }
@@ -30,6 +32,7 @@ Quasar.start(() => {
   new Vue({
     el: '#q-app',
     router,
+    store,
     render: h => h(require('./App'))
   })
 })
