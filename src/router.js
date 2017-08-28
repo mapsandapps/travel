@@ -31,8 +31,14 @@ export default new VueRouter({
           component: load('Home')
         },
         {
-          path: '/trips/:trip',
-          component: load('Trip')
+          path: '/:trip',
+          component: load('Trip'),
+          children: [
+            {
+              path: '/:trip/:place',
+              component: load('Trip')
+            }
+          ]
         }
       ]
     },

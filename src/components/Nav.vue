@@ -4,7 +4,7 @@
     view="lHh Lpr fff"
     :left-class="{'bg-grey-2': true}"
   >
-    <q-toolbar slot="header" class="glossy">
+    <q-toolbar slot="header" class="bg-primary">
       <q-btn
         flat
         @click="$refs.layout.toggleLeft()"
@@ -13,8 +13,8 @@
       </q-btn>
 
       <q-toolbar-title>
-        Quasar App
-        <div slot="subtitle">Running on Quasar v{{$q.version}}</div>
+        Shawn's Travels
+        <div slot="subtitle">{{ activeTripName }}</div>
       </q-toolbar-title>
     </q-toolbar>
 
@@ -24,7 +24,7 @@
         <q-side-link
           item
           v-for="trip in trips"
-          :to="`trips/${trip.slug}`"
+          :to="`/${trip.slug}`"
           :key="trip.slug">
           <q-item-side icon="location_on" />
           <q-item-main :label="trip.name" :sublabel="trip.date" />
@@ -32,11 +32,6 @@
       </q-list>
     </div>
 
-    <!--
-      Replace following <div> with
-      <router-view /> component
-      if using subRoutes
-    -->
     <router-view class="layout-view" />
   </q-layout>
 </template>
@@ -56,7 +51,7 @@ import {
 } from 'quasar'
 
 export default {
-  name: 'index',
+  name: 'nav',
   components: {
     QLayout,
     QToolbar,
@@ -71,7 +66,13 @@ export default {
   },
   data () {
     return {
+      activeTripName: this.$store.state.activeTrip,
       trips: this.$store.state.trips
+    }
+  },
+  watch: {
+    activeTripName: () => {
+      console.log('changed')
     }
   }
 }

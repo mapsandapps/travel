@@ -3,21 +3,28 @@ import Vuex from 'vuex'
 
 import find from 'lodash/find'
 
+import data from './data'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    trips: [
-      {
-        slug: 'montana-2017',
-        name: 'Montana 2017',
-        date: 'August 5-12, 2017'
-      }
-    ]
+    activeTrip: '',
+    trips: data
   },
   getters: {
     getTrip: (state, getters) => (slug) => {
-      return find(state.trips, { 'slug': slug })
+      return find(state.trips, { slug })
+    }
+  },
+  mutations: {
+    setActiveTrip(state, slug) {
+      state.activeTrip = find(state.trips, { slug }).name
+    }
+  },
+  actions: {
+    setActiveTrip({ commit, state }, slug) {
+      commit('setActiveTrip', slug)
     }
   }
 })

@@ -23,6 +23,12 @@ To add photos to S3:
 * Upload them
 * Select the folder -> More -> Make public
 
+To get EXIF from photos:
+```
+brew install exiftool
+exiftool -a -u -Make -Model -ShutterSpeedValue -ApertureValue -FocalLength -FocalLengthIn35mmFormat -Keywords -DateCreated -TimeCreated -Creator -Title -Rights -Description -DateTimeCreated -GPSLatitude -GPSLongitude -json *.jpg
+```
+
 To deploy:
 
 ```
