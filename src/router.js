@@ -36,7 +36,13 @@ export default new VueRouter({
           children: [
             {
               path: '/:trip/:place',
-              component: load('Trip')
+              component: load('Trip'),
+              children: [
+                {
+                  path: '/:trip/:place/:photoID',
+                  component: load('Photo')
+                }
+              ]
             }
           ]
         }

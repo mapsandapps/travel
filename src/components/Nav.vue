@@ -72,12 +72,12 @@ export default {
   },
   watch: {
     activeTripName: () => {
-      console.log('changed')
+      console.log('changed') // FIXME: still not working
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 
 </style>
