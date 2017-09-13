@@ -11,10 +11,12 @@
       </q-toolbar-title>
     </q-toolbar>
 
+    <!-- TODO: possibly use home icon for home but words for other breadcrumbs -->
+
     <ul class="breadcrumb">
-      <li v-for="crumb in breadcrumbs" :key="crumb.slug">
-        <a>
-          <q-icon :name="crumb.icon" />
+      <li v-for="(crumb, index) in breadcrumbs" :key="crumb.slug">
+        <a :href="getURL(index)">
+          <!-- <q-icon :name="crumb.icon" /> -->
           {{ crumb.name }}
         </a>
       </li>
@@ -63,7 +65,7 @@ export default {
   methods: {
     createBreadcrumbs(params) {
       var crumbs = [{
-        slug: '',
+        slug: '#',
         name: 'Travels',
         icon: 'home'
       }]
@@ -84,6 +86,13 @@ export default {
         }
       }
       this.breadcrumbs = crumbs
+    },
+    getURL(crumbIndex) {
+      var url = ''
+      for (var i = 0; i < crumbIndex + 1; i++) {
+        url += '/' + this.breadcrumbs[i].slug
+      }
+      return url
     }
   },
   mounted() {
