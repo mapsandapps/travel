@@ -1,7 +1,16 @@
 <template>
   <q-card>
     <q-card-main>
-      Maybe the front page should have a big image of each trip that you can click to go there.
+      <q-list no-border link inset-delimiter>
+        <q-list-header>Trips</q-list-header>
+        <q-item
+          v-for="trip in trips"
+          :to="`/${trip.slug}`"
+          :key="trip.slug">
+          <q-item-side icon="location_on" />
+          <q-item-main :label="trip.name" :sublabel="trip.date" />
+        </q-item>
+      </q-list>
     </q-card-main>
   </q-card>
 </template>
@@ -9,14 +18,29 @@
 <script>
 import {
   QCard,
-  QCardMain
+  QCardMain,
+  QItem,
+  QItemMain,
+  QItemSide,
+  QList,
+  QListHeader
 } from 'quasar'
 
 export default {
   name: 'home',
   components: {
     QCard,
-    QCardMain
+    QCardMain,
+    QItem,
+    QItemMain,
+    QItemSide,
+    QList,
+    QListHeader
+  },
+  data() {
+    return {
+      trips: this.$store.state.trips
+    }
   }
 }
 </script>

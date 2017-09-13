@@ -5,38 +5,27 @@
     :left-class="{'bg-grey-2': true}"
   >
     <q-toolbar slot="header" class="bg-primary">
-      <q-btn
-        flat
-        @click="$refs.layout.toggleLeft()"
-      >
-        <q-icon name="menu" />
-      </q-btn>
-
       <q-toolbar-title>
         Shawn's Travels
         <div slot="subtitle">{{ activeTripName }}</div>
       </q-toolbar-title>
     </q-toolbar>
 
-    <div slot="left">
-      <q-list no-border link inset-delimiter>
-        <q-list-header>Trips</q-list-header>
-        <q-side-link
-          item
-          v-for="trip in trips"
-          :to="`/${trip.slug}`"
-          :key="trip.slug">
-          <q-item-side icon="location_on" />
-          <q-item-main :label="trip.name" :sublabel="trip.date" />
-        </q-side-link>
-      </q-list>
-    </div>
+    <ul class="breadcrumb">
+      <li v-for="crumb in breadcrumbs" :key="crumb.slug">
+        <a>
+          <q-icon :name="crumb.icon" />
+          {{ crumb.name }}
+        </a>
+      </li>
+    </ul>
 
     <router-view class="layout-view" />
   </q-layout>
 </template>
 
 <script>
+import find from 'lodash/find'
 import {
   QLayout,
   QToolbar,
@@ -67,10 +56,43 @@ export default {
   data () {
     return {
       activeTripName: this.$store.state.activeTrip,
+      breadcrumbs: [],
       trips: this.$store.state.trips
     }
   },
+  methods: {
+    createBreadcrumbs(params) {
+      var crumbs = [{
+        slug: '',
+        name: 'Travels',
+        icon: 'home'
+      }]
+      if (params.trip) {
+        var thisTrip = find(this.trips, ['slug', params.trip])
+        console.log(this.trips)
+        crumbs.push({
+          slug: params.trip,
+          name: thisTrip.name,
+          icon: 'map'
+        })
+        if (params.place) {
+          crumbs.push({
+            slug: params.place,
+            name: find(thisTrip.places, ['slug', params.place]).name,
+            icon: 'place'
+          })
+        }
+      }
+      this.breadcrumbs = crumbs
+    }
+  },
+  mounted() {
+    this.createBreadcrumbs(this.$route.params)
+  },
   watch: {
+    '$route'(to, from) {
+      this.createBreadcrumbs(to.params)
+    },
     activeTripName: () => {
       console.log('changed') // FIXME: still not working
     }
