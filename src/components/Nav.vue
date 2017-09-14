@@ -2,12 +2,10 @@
   <q-layout
     ref="layout"
     view="lHh Lpr fff"
-    :left-class="{'bg-grey-2': true}"
   >
     <q-toolbar slot="header" class="bg-primary">
       <q-toolbar-title>
         Shawn's Travels
-        <div slot="subtitle">{{ activeTripName }}</div>
       </q-toolbar-title>
     </q-toolbar>
 
@@ -93,16 +91,20 @@ export default {
         url += '/' + this.breadcrumbs[i].slug
       }
       return url
+    },
+    setStoreFromNav(params) {
+      console.log('SET STORE HERE')
+      this.createBreadcrumbs(params) // TODO: maybe move this into store too
     }
   },
   mounted() {
-    this.createBreadcrumbs(this.$route.params)
+    this.setStoreFromNav(this.$route.params)
   },
   watch: {
     '$route'(to, from) {
-      this.createBreadcrumbs(to.params)
+      this.setStoreFromNav(to.params)
     },
-    activeTripName: () => {
+    activeTripName() {
       console.log('changed') // FIXME: still not working
     }
   }

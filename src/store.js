@@ -11,6 +11,7 @@ export default new Vuex.Store({
   state: {
     activeTrip: '',
     activePlace: '',
+    activeSlide: -1,
     trips: data
   },
   getters: {
@@ -23,12 +24,19 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    setSlide(state, slide) {
+      state.activeSlide = slide
+    },
     setActiveTrip(state, routeParams) {
       state.activeTrip = find(state.trips, { slug: routeParams.trip })
       state.activePlace = find(state.activeTrip.places, { slug: routeParams.place })
+      state.activeSlide = -1 // FIXME: not working?
     }
   },
   actions: {
+    setSlide({ commit, state }, slide) {
+      commit('setSlide', slide)
+    },
     setActiveTrip({ commit, state }, routeParams) {
       commit('setActiveTrip', routeParams)
     }
