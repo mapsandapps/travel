@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{ name }}
+    {{ trip.name }}
     <q-list v-if="!place" separator>
       <q-item
         v-for="place in trip.places"
@@ -16,7 +16,7 @@
       </q-item>
     </q-list>
     <div v-if="place">
-      <div class="chevrons">
+      <div class="chevrons" v-if="place.photos">
         <!-- FIXME: need some aria -->
         <q-btn
           v-if="activeSlide > -1"
@@ -60,7 +60,7 @@ import {
 } from 'quasar'
 import Photo from './Photo'
 
-import find from 'lodash/find'
+import { mapState } from 'vuex'
 
 export default {
   name: 'trip',
@@ -75,43 +75,22 @@ export default {
     QList
   },
   place: '',
-  data() {
-    return {
-      name: this.$store.state.activeTrip.name,
-      trip: this.$store.getters.getTrip(this.$route.params.trip),
-      placeName: this.$route.params.place,
-      place: {},
-      activeSlide: this.$store.state.activeSlide
-    }
-  },
+  computed: mapState({
+    trip: 'activeTrip',
+    place: 'activePlace',
+    activeSlide: 'activeSlide'
+  }),
   methods: {
     advanceSlide(amount) {
-      this.activeSlide += amount
-      if (this.activeSlide === -1) {
+      var newSlide = this.activeSlide + amount
+      if (newSlide < 0) {
         this.$router.push(`/${this.$route.params.trip}/${this.place.slug}`)
       } else {
-        this.$router.push(`/${this.$route.params.trip}/${this.place.slug}/${this.activeSlide}`)
+        this.$router.push(`/${this.$route.params.trip}/${this.place.slug}/${newSlide}`)
       }
     },
     changePlace(place) {
-      this.placeName = place.name
-      this.place = place
       this.$router.push(`/${this.$route.params.trip}/${place.slug}`)
-    }
-  },
-  beforeMount() {
-    this.$store.dispatch('setActiveTrip', this.$route.params).then(() => {
-      this.name = this.$store.state.activeTrip.name
-      this.place = find(this.trip.places, { slug: this.$route.params.place })
-    })
-  },
-  watch: {
-    '$route'(to, from) {
-      if (this.activeSlide > -1) {
-        this.$store.dispatch('setSlide', this.activeSlide)
-      } else {
-        this.$store.dispatch('setSlide', -1)
-      }
     }
   }
 }

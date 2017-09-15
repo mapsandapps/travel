@@ -69,7 +69,6 @@ export default {
       }]
       if (params.trip) {
         var thisTrip = find(this.trips, ['slug', params.trip])
-        console.log(this.trips)
         crumbs.push({
           slug: params.trip,
           name: thisTrip.name,
@@ -93,8 +92,8 @@ export default {
       return url
     },
     setStoreFromNav(params) {
-      console.log('SET STORE HERE')
-      this.createBreadcrumbs(params) // TODO: maybe move this into store too
+      this.createBreadcrumbs(params)
+      this.$store.dispatch('setState', params)
     }
   },
   mounted() {
@@ -103,9 +102,6 @@ export default {
   watch: {
     '$route'(to, from) {
       this.setStoreFromNav(to.params)
-    },
-    activeTripName() {
-      console.log('changed') // FIXME: still not working
     }
   }
 }
